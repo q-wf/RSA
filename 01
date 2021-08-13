@@ -1,0 +1,95 @@
+# RSA __ Rivest–Shamir–Adleman
+
+
+#Input Prime Numbers
+print("\n###_________ _R_S_A_ _________###\n")
+p = int(input("Enter a prime number for p: "))
+q = int(input("Enter a prime number for q: "))
+n = p * q
+
+#calculate Euler's totient
+Pi = (p-1)*(q-1)
+
+print("\nn = p * q = " + str(n) + "\n")
+print("Euler's function [Pi(n)]: " + str(Pi) + "\n")
+
+
+#GCD
+#a = int(input("Enter first Number : "))
+#b = int(input("Enter second Number : "))
+
+def gcd(a, b):
+    while b != 0:
+        c = a % b
+        a = b
+        b = c
+    return a
+#print(gcd(a, b))
+
+#MOD
+#a = int(input("Enter first Number : "))
+#m = int(input("Enter second Number : "))
+def modinv(a, m):
+    for x in range(1, m):
+        if (a * x) % m == 1:
+            return x
+    return None
+#print(modinv(a, m))
+
+#COPRIMES
+#a = int(input("Enter first Number : "))
+#Pi = 40
+def coprimes(a):
+    l = []
+    for x in range(2, a):
+        if gcd(a, x) == 1 and modinv(x,Pi) != None:
+            l.append(x)
+    for x in l:
+        if x == modinv(x,Pi):
+            l.remove(x)
+    return l
+#print(coprimes(a))
+#n = 55
+print("Choose an e from a below coprimes array:\n")
+print(str(coprimes(Pi)) + "\n")
+e = int(input())
+d = modinv(e,Pi)
+print("\nYour public key is a pair of numbers (e=" + str(e) + ", n=" + str(n) + ").\n")
+print("Your private key is a pair of numbers (d=" + str(d) + ", n=" + str(n) + ").\n")
+
+repeat = True
+while repeat:
+    print("Encrypt ________ 1")
+    print("Decrypt ________ 2")
+    print("Exit    ________ 0")
+    choice = int(input("\nWhat is your choice : "))
+    print("")
+    if choice == 1:
+        print("Encryption [Only Integer] ")
+        m = int(input("Message [M]: "))
+        print("")
+        #encryption
+        def encrypt(m):
+            c = (m**e%n)
+            return c
+        Y = encrypt(m)
+        print("Encrypted message: " + str(Y) + "\n")
+        print("")
+        repeat = True
+
+    elif choice == 2:
+        print ("Decryption [Only Integer] ")
+        c = int(input("Cipher [C]: "))
+        print("")
+        #decryption
+        def decrypt_block(c):
+            m = modinv(c**d, n)
+            return m
+        Z = encrypt(c)
+        print("Decrypted message: " + str(Z) + "\n")
+        print("")
+        repeat = True
+    else:
+        repeat = False
+else:
+    print("GOODBYE,SEE U AGAIN.")
